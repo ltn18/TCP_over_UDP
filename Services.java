@@ -1,3 +1,10 @@
+
+/**
+ * @author: Lam Nguyen
+ * @id: ltn18
+ * @course: Computer Networks
+ */
+
 import java.net.*;
 import java.util.regex.*;
 
@@ -14,12 +21,31 @@ public class Services {
   // string format for invalid ip/hostname
   private final String invalidIPAndHostnameError = "IP address or Hostname \"%s\" is not valid";
 
-  public Services() {}
+  /**
+   * Services contructor
+   */
+  public Services() {
+  }
 
+  /**
+   * Generate a random number in the range min max
+   * 
+   * @param min range's lower bound
+   * @param max range's upper bound
+   * @return a random number in the range
+   */
   public int getRandomNumber(int min, int max) {
     return (int) ((Math.random() * (max - min)) + min);
   }
 
+  /**
+   * Get the message type associated with 3 way handshaking
+   * 
+   * @param ack ack byte value
+   * @param syn syn byte value
+   * @param fin fin byte value
+   * @return the message type associated with 3 way handshaking
+   */
   public String messageType(boolean ack, boolean syn, boolean fin) {
     if (fin)
       return "FIN";
