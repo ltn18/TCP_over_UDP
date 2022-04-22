@@ -45,32 +45,33 @@ public class Server {
         ACK = true;
         log += " " + services.messageType(ACK, SYN, FIN);
         sendData = "SYNACK".getBytes();
-      }
-      else if (message.equals("ACK") && !FIN) {
+      } else if (message.equals("ACK") && !FIN) {
         FIN = true;
         log += " " + services.messageType(ACK, SYN, FIN);
         sendData = "FIN".getBytes();
-      }
-      else sendData = capitalizedSentence.getBytes();
+      } else sendData = capitalizedSentence.getBytes();
 
       System.out.println(log);
       DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
       socket.send(sendPacket);
-      String modifiedSentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
+      String messageToClient = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
-      // socket.setSoTimeout(500);
-      int tries = 0;
-      while ((modifiedSentence.length() == 0 || modifiedSentence.equals(null) || modifiedSentence.equals("")) && tries < 5) {
-        System.out.println("Sending packet " + seq_num + " " + "Retransmission");
-        socket.send(sendPacket);
-        socket.receive(receivePacket);
-        modifiedSentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
-        tries++;
+      if (messageToClient.length() == 0 || messageToClient.equals(null) || messageToClient.equals("")) {
+        socket.setSoTimeout(500);
+        int tries = 0;
+        while ((messageToClient.length() == 0 || messageToClient.equals(null) || messageToClient.equals(""))
+            && tries < 5) {
+          System.out.println("Sending packet " + seq_num + " " + "Retransmission");
+          socket.send(sendPacket);
+          socket.receive(receivePacket);
+          messageToClient = new String(receivePacket.getData(), 0, receivePacket.getLength());
+          tries++;
+        }
       }
 
       seq_num++;
 
-      if ((modifiedSentence.equals(null) || modifiedSentence.equals("")))
+      if ((messageToClient.equals(null) || messageToClient.equals("")))
         System.out.println("Packet dropped!");
     }
   }

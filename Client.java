@@ -77,29 +77,29 @@ class Client {
       DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
       socket.receive(receivePacket);
 
-      String modifiedSentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
+      String messageFromServer = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
       socket.setSoTimeout(500);
       int tries = 0;
-      while ((modifiedSentence.length() == 0 || modifiedSentence.equals(null) || modifiedSentence.equals(""))
+      while ((messageFromServer.length() == 0 || messageFromServer.equals(null) || messageFromServer.equals(""))
           && tries < 5) {
         System.out.println("Sending packet " + seq_num + " " + "Retransmission");
         socket.send(sendPacket);
         socket.receive(receivePacket);
-        modifiedSentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
+        messageFromServer = new String(receivePacket.getData(), 0, receivePacket.getLength());
         tries++;
       }
 
       seq_num++;
 
-      if ((modifiedSentence.equals(null) || modifiedSentence.equals("")))
+      if ((messageFromServer.equals(null) || messageFromServer.equals("")))
         System.out.println("Packet dropped!");
 
-      if (modifiedSentence.equals("quit")) {
+      if (messageFromServer.equals("quit")) {
         running = false;
       }
 
-      System.out.println("Packet Data From Server: " + modifiedSentence);
+      System.out.println("Packet Data From Server: " + messageFromServer);
     }
   }
 
