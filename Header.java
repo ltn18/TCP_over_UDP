@@ -70,9 +70,9 @@ public class Header {
       sb.append("0 ");
 
     // A S F
-    sb.append("A ");
-    sb.append("S ");
-    sb.append("F ");
+    sb.append(ACK ? "1 " : "0 ");
+    sb.append(SYN ? "1 " : "0 ");
+    sb.append(FIN ? "1 ": "0 ");
     sb.append("|");
 
     sb.append("\n");
